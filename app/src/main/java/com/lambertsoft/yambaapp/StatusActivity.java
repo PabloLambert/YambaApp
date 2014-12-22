@@ -1,18 +1,24 @@
 package com.lambertsoft.yambaapp;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.marakana.android.yamba.clientlib.YambaClient;
+
+import org.w3c.dom.Text;
 
 
 public class StatusActivity extends ActionBarActivity {
@@ -20,6 +26,8 @@ public class StatusActivity extends ActionBarActivity {
     private final static String TAG = "StatusActivity";
     EditText editStatus;
     Button buttonTweet;
+    TextView textCount;
+    int defaultTextColor;
 
 
     @Override
@@ -29,6 +37,8 @@ public class StatusActivity extends ActionBarActivity {
 
         editStatus = (EditText) findViewById(R.id.editStatus);
         buttonTweet = (Button) findViewById(R.id.buttonTweet);
+        textCount = (TextView) findViewById(R.id.textCount);
+        defaultTextColor = textCount.getTextColors().getDefaultColor();
 
         buttonTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +47,30 @@ public class StatusActivity extends ActionBarActivity {
                 Log.d(TAG, "onClick with status: " + status);
                 //Toast.makeText(getApplication(), "onClick with status: " + status, Toast.LENGTH_SHORT).show();
                 new PostTask().execute(status);
+            }
+        });
+
+        editStatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int n = 140 - editStatus.length();
+                textCount.setText(Integer.toString(n));
+                if (n < 10 && n > 0)
+                    textCount.setTextColor(Color.YELLOW);
+                else if (n < 0 )
+                    textCount.setTextColor(Color.RED);
+                else
+                    textCount.setTextColor(defaultTextColor);
             }
         });
     }
