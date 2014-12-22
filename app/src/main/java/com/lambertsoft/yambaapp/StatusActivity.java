@@ -1,19 +1,41 @@
 package com.lambertsoft.yambaapp;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class StatusActivity extends ActionBarActivity {
+
+    private final static String TAG = "StatusActivity";
+    EditText editStatus;
+    Button buttonTweet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
-    }
 
+        editStatus = (EditText) findViewById(R.id.editStatus);
+        buttonTweet = (Button) findViewById(R.id.buttonTweet);
+
+        buttonTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String status = editStatus.getText().toString();
+                Log.d(TAG, "onClick with status: " + status);
+                Toast.makeText(getApplication(), "onClick with status: " + status, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
