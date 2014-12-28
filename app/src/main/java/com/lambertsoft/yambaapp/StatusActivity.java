@@ -1,6 +1,7 @@
 package com.lambertsoft.yambaapp;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,14 +13,17 @@ public class StatusActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.new_activity_layout);
+
+
 
         if (savedInstanceState == null ) {
             StatusFragment fragment = new StatusFragment();
             FragmentManager manager = getFragmentManager();
-            manager
-                    .beginTransaction()
-                    .add(android.R.id.content, fragment, fragment.getClass().getSimpleName())
-                    .commit();
+
+            manager.beginTransaction()
+                   .add(android.R.id.content, fragment, fragment.getClass().getSimpleName())
+                   .commit();
         }
 
     }
