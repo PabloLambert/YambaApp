@@ -32,6 +32,13 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <provider
+            android:name=".StatusProvider"
+            android:authorities="com.lambertsoft.yambaapp.StatusProvider"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

@@ -2,8 +2,11 @@ package com.lambertsoft.yambaapp;
 
 import android.app.IntentService;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -38,11 +41,29 @@ public class RefreshService extends IntentService {
             Toast.makeText(this, "Please update username and password", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
         YambaClient cloud = new YambaClient(username, password);
         try {
+            int count = 0;
+
             List<YambaClient.Status> timeline = cloud.getTimeline(20);
             for (YambaClient.Status status : timeline) {
-                Log.d(TAG, String.format("%s: %s", status.getUser(), status.getMessage()));
+                values.clear();
+                values.put(StatusContract.Column.ID, status.getId());
+                values.put(StatusContract.Column.USER, status.getMessage());
+                values.put(StatusContract.Column.MESSAGE, status.getMessage());
+                values.put(StatusContract.Column.CREATED_AT, status.getCreatedAt().getTime());
+
+                Uri uri = getContentResolver().insert(StatusContract.CONTENT_URI, values);
+                if (uri != null ){
+                    count ++;
+                }
+
+                //Log.d(TAG, String.format("%s: %s", status.getUser(), status.getMessage()));
             }
         } catch (YambaClientException e) {
                 Log.e(TAG, "Failed to fetch the timeline", e);
