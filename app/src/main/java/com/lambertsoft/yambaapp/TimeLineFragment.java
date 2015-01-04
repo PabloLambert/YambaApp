@@ -3,6 +3,7 @@ package com.lambertsoft.yambaapp;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -69,6 +71,16 @@ public class TimeLineFragment extends ListFragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) { // 8
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id ){
+        DetailFragment fragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.fragment_detail);
+        if (fragment != null && fragment.isVisible()) {
+            fragment.updateView(id);
+        } else {
+            startActivity(new Intent(getActivity(), DetailActivity.class).putExtra(StatusContract.Column.ID, id));
+        }
     }
 
 }

@@ -17,9 +17,14 @@ import com.marakana.android.yamba.clientlib.YambaClient;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class RefreshService extends IntentService {
     static final String TAG = "RefreshService";
+    static int countEvent;
+    static YambaClientException error;
+    android.os.Handler handler;
 
     public RefreshService() {
         super(TAG);
@@ -29,10 +34,12 @@ public class RefreshService extends IntentService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreated");
+        handler = new android.os.Handler();
     }
 
     @Override
     public void onHandleIntent(Intent intent) {
+
         Log.d(TAG, "onStarted");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String username = prefs.getString("username", "");
@@ -45,11 +52,14 @@ public class RefreshService extends IntentService {
 
         ContentValues values = new ContentValues();
 
-        YambaClient cloud = new YambaClient(username, password);
+        YambaClient cloud =  new YambaClient(username, password);
         try {
             int count = 0;
 
+
             List<YambaClient.Status> timeline = cloud.getTimeline(20);
+            countEvent = timeline.size();
+
             for (YambaClient.Status status : timeline) {
                 values.clear();
                 values.put(StatusContract.Column.ID, status.getId());
@@ -60,11 +70,26 @@ public class RefreshService extends IntentService {
                 Uri uri = getContentResolver().insert(StatusContract.CONTENT_URI, values);
                 if (uri != null ){
                     count ++;
+                } else {
+                    handler.post(new Runnable() {
+                        //@Override
+                        public void run() {
+                            Toast.makeText(RefreshService.this, "insert failed" , Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 //Log.d(TAG, String.format("%s: %s", status.getUser(), status.getMessage()));
             }
         } catch (YambaClientException e) {
+             error = e;
+
+            handler.post(new Runnable() {
+                //@Override
+                public void run() {
+                    Toast.makeText(RefreshService.this, "Failed to fetch the timeline" + error , Toast.LENGTH_SHORT).show();
+                }
+            });
                 Log.e(TAG, "Failed to fetch the timeline", e);
         }
         return;

@@ -18,6 +18,10 @@
             android:label="@string/action_settings" >
         </activity>
         <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_detail_activity" >
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
