@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -41,6 +42,10 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_refresh:
                 startService(new Intent(this, RefreshService.class));
+                return true;
+            case R.id.action_purge:
+                int rows = getContentResolver().delete(StatusContract.CONTENT_URI, null, null);
+                Toast.makeText(this, "Delete: " + rows + " rows", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -30,6 +30,7 @@ public class RefreshService extends IntentService {
         super.onCreate();
         Log.d(TAG, "onCreated");
     }
+
     @Override
     public void onHandleIntent(Intent intent) {
         Log.d(TAG, "onStarted");
@@ -42,8 +43,6 @@ public class RefreshService extends IntentService {
             return;
         }
 
-        DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         YambaClient cloud = new YambaClient(username, password);
