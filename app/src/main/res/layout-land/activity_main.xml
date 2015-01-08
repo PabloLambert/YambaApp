@@ -7,14 +7,14 @@
     tools:context="com.lambertsoft.yambaapp.MainActivity">
 
     <fragment
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:name="com.lambertsoft.yambaapp.TimeLineFragment"
         android:id="@+id/fragment_timeline"
         tools:layout="@layout/fragment_time_line" />
 
     <fragment
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:name="com.lambertsoft.yambaapp.DetailFragment"
         android:id="@+id/fragment_detail"

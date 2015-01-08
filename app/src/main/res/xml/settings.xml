@@ -9,4 +9,9 @@
         android:inputType="textPassword"
         android:title="@string/password"
         android:key="password" android:summary="@string/password_summary"/>
+    <EditTextPreference
+        android:key="interval"
+        android:summary="Interval Time"
+        android:title="Interval" />
+
 </PreferenceScreen>

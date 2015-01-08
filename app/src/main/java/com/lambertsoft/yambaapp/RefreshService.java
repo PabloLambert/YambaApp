@@ -22,7 +22,6 @@ import java.util.logging.LogRecord;
 
 public class RefreshService extends IntentService {
     static final String TAG = "RefreshService";
-    static int countEvent;
     static YambaClientException error;
     android.os.Handler handler;
 
@@ -56,9 +55,7 @@ public class RefreshService extends IntentService {
         try {
             int count = 0;
 
-
             List<YambaClient.Status> timeline = cloud.getTimeline(20);
-            countEvent = timeline.size();
 
             for (YambaClient.Status status : timeline) {
                 values.clear();
@@ -70,16 +67,12 @@ public class RefreshService extends IntentService {
                 Uri uri = getContentResolver().insert(StatusContract.CONTENT_URI, values);
                 if (uri != null ){
                     count ++;
-                } else {
-                    handler.post(new Runnable() {
-                        //@Override
-                        public void run() {
-                            Toast.makeText(RefreshService.this, "insert failed" , Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
 
                 //Log.d(TAG, String.format("%s: %s", status.getUser(), status.getMessage()));
+            }
+            if (count > 0) {
+                sendBroadcast(new Intent("com.lambertsoft.yambaapp.action.NEW_STATUS").putExtra("count", count));
             }
         } catch (YambaClientException e) {
              error = e;
