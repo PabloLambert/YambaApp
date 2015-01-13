@@ -72,7 +72,7 @@ public class RefreshService extends IntentService {
                 //Log.d(TAG, String.format("%s: %s", status.getUser(), status.getMessage()));
             }
             if (count > 0) {
-                sendBroadcast(new Intent("com.lambertsoft.yambaapp.action.NEW_STATUS").putExtra("count", count));
+                sendBroadcast(new Intent("com.lambertsoft.yambaapp.action.NEW_STATUSES").putExtra("count", count));
             }
         } catch (YambaClientException e) {
              error = e;

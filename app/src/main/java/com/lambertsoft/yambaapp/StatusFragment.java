@@ -105,7 +105,7 @@ public class StatusFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(StatusFragment.this.getActivity(), result, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(StatusFragment.this.getActivity(), result, Toast.LENGTH_SHORT).show();
         }
     }
 }
